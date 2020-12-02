@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import { PostListComponent } from './components/posts/post-list/post-list.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +32,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatToolbarModule,
     MatInputModule,
     MatExpansionModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
