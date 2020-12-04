@@ -3,6 +3,8 @@ const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 
 const Post = require('./models/post');
+const post = require('./models/post');
+
 
 const app = express();
 
@@ -28,34 +30,39 @@ app.use((req, res, next) => {
     next();
 });
 
+
+
+app.get('/posts',(req, res, next) =>{
+    post.find().then(documents => {
+        res.status(200).json({
+            message: 'Posts fetched successfully',
+            posts: documents
+        });
+    })
+});
+
 app.post('/posts', (req, res, next) => {
     const post = new Post({
         title: req.body.title,
         content: req.body.content
     });
-    post.save();
-    res.status(201).json({
-        message : 'Post added successfully'
+    post.save().then(result =>{
+        res.status(201).json({
+        message : 'Post added successfully',
+        postId: result._id
     })
+    });
+
 })
 
-app.use('/posts',(req, res, next) =>{
-    const posts = [
-        {
-            id: 'dsgsg342',
-            title: 'First Post',
-            content: 'Content of first post'
-        },
-        {
-            id: 'agbi434',
-            title: 'Second Post',
-            content: 'Content of Second post'
-        }
-    ];
-    res.status(200).json({
-        message: 'Posts fetched successfully',
-        posts: posts
+app.delete('/posts/:id', (req, res , next) => {
+    post.deleteOne({_id: req.params.id}).then(result => {
+        console.log(result);
+        res.status(200).json({
+            message: 'Post deleted successfully'
+        });
     });
+   
 });
 
 
