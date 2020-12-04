@@ -1,7 +1,21 @@
 const express = require('express');
 const bodyparser = require('body-parser');
+const mongoose = require('mongoose');
+
+const Post = require('./models/post');
 
 const app = express();
+
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: false}));
+
+mongoose.connect("mongodb+srv://sdatrey:lZwYgd9qx45EQjzG@cluster0.njmh8.mongodb.net/node-angular?retryWrites=true&w=majority")
+.then(() => {
+    console.log('Connected Successfully');
+})
+.catch(() => {
+    console.log('Connection Failed');
+})
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -15,7 +29,11 @@ app.use((req, res, next) => {
 });
 
 app.post('/posts', (req, res, next) => {
-    const post = req.body;
+    const post = new Post({
+        title: req.body.title,
+        content: req.body.content
+    });
+    post.save();
     res.status(201).json({
         message : 'Post added successfully'
     })
