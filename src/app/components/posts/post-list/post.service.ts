@@ -30,6 +30,9 @@ export class PostService{
     getPostUpdateListener(): Observable<Post[]> {
             return this.postsUpdated.asObservable();
         }
+    getPost(id: string): Observable<{_id: string, title: string, content: string}> {
+        return this.http.get<{_id: string, title: string, content: string}>('http://localhost:3000/posts/' + id);
+    }
 
     addPost(title: string, content: string){
         const post : Post = {id: null,title: title, content: content};
@@ -42,10 +45,22 @@ export class PostService{
         })
         
     }
+
+    updatePost(id: string, title: string, content: string){
+        const post: Post = {id: id, title: title, content: content};
+        this.http.put('http://localhost:3000/posts/' + id, post)
+        .subscribe((res) => {
+            const updatedPost = [...this.posts];
+            const oldPostIndex = updatedPost.findIndex(p => p.id === id);
+            updatedPost[oldPostIndex] = post;
+            this.posts = updatedPost;
+            this.postsUpdated.next([...this.posts]);
+        });
+    }
+
     deletePost(postId: string){
         this.http.delete('http://localhost:3000/posts/' + postId)
-        .subscribe((result) => {
-            console.log(result);
+        .subscribe(() => {
             const postsUpdated = this.posts.filter(post => post.id != postId);
             this.posts = postsUpdated;
             this.postsUpdated.next([...this.posts]);
