@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
@@ -8,6 +9,7 @@ const app = express();
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: false}));
+app.use("/images", express.static(path.join("backend/images")));
 
 mongoose.connect("mongodb+srv://sdatrey:lZwYgd9qx45EQjzG@cluster0.njmh8.mongodb.net/node-angular", {
     useUnifiedTopology: true,
