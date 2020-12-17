@@ -14,5 +14,6 @@
           <button mat-button color="accent" (click)= "onDelete(post.id)">Delete</button>
         </mat-action-row>
     </mat-expansion-panel>
-</mat-accordion>    
+</mat-accordion>  
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"></mat-paginator>  
 <p *ngIf="posts.length <= 0" class="mat-body-1 info-text">No posts added yet!</p>

@@ -13,6 +13,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { PostListComponent } from './components/posts/post-list/post-list.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { HttpClientModule } from '@angular/common/http';
@@ -33,6 +34,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatToolbarModule,
     MatInputModule,
     MatIconModule,
+    MatPaginatorModule,
     MatExpansionModule,
     ReactiveFormsModule,
     HttpClientModule
