@@ -1,7 +1,14 @@
 <mat-toolbar>
    <a [routerLink]="['/']" routerLinkActive="router-link-active" ><span>My App</span></a>
    <span class="spacer"></span>
-   <button mat-button [routerLink]="['/create']" routerLinkActive="router-link-active" >
+   <button *ngIf="userIsAuthenticated" mat-button [routerLink]="['/create']" routerLinkActive="router-link-active" >
     New Post
   </button>
+  <button *ngIf="!userIsAuthenticated" mat-button [routerLink]="['/login']" routerLinkActive="router-link-active" >
+    Login
+  </button>
+  <button *ngIf="!userIsAuthenticated" mat-button [routerLink]="['/signup']" routerLinkActive="router-link-active" >
+   Signup
+  </button>
+  <button *ngIf="userIsAuthenticated" mat-button (click)="onLogout()">Logout</button>
  </mat-toolbar>

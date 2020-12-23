@@ -28,7 +28,7 @@ export class PostCreateComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       title: new FormControl(null, {validators: [Validators.required, Validators.minLength(4)]}) ,
-      content: new FormControl(null, {validators:[Validators.required]}),
+      content: new FormControl(null, {validators:[Validators.required, Validators.minLength(4)]}),
       image: new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
     });
 
