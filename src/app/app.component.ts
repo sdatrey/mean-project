@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title = 'mean';
   constructor(private authService: AuthService) {}
   ngOnInit(){ 
-    this.authService.getIsAuth();
+    this.authService.autoAuthUser();
 
   }
 }

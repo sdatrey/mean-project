@@ -20,7 +20,8 @@ export class PostService{
                    title: post.title,
                    content: post.content,
                    id: post._id,
-                   imagePath: post.imagePath
+                   imagePath: post.imagePath,
+                   creator: post.creator
                };
            }),
             maxPosts: postData.maxPosts
@@ -34,8 +35,8 @@ export class PostService{
     getPostUpdateListener() {
             return this.postsUpdated.asObservable();
         }
-    getPost(id: string): Observable<{_id: string, title: string, content: string, imagePath: string}> {
-        return this.http.get<{_id: string, title: string, content: string, imagePath: string}>('http://localhost:3000/posts/' + id);
+    getPost(id: string): Observable<{_id: string, title: string, content: string, imagePath: string, creator: string}> {
+        return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string}>('http://localhost:3000/posts/' + id);
     }
     addPost(title: string, content: string, image: File){
         const postData = new FormData();
@@ -61,7 +62,8 @@ export class PostService{
                 id: id,
                 title: title,
                 content: content,
-                imagePath: image
+                imagePath: image, 
+                creator: null
             }
         }
         this.http.put('http://localhost:3000/posts/' + id, postData)

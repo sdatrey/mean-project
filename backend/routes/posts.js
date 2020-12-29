@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 
 const Post = require('../models/post');
+const checkAuth = require("../middleware/check-auth");
 
 const MIME_TYPE_MAP = {
     'image/png': 'png',
@@ -48,12 +49,13 @@ router.get('',(req, res, next) =>{
     });
 
 
-router.post('', multer({storage: storage}).single("image"), (req, res, next) => {
+router.post('',checkAuth, multer({storage: storage}).single("image"), (req, res, next) => {
     const url = req.protocol + '://' + req.get('host');
     const post = new Post({
         title: req.body.title,
         content: req.body.content,
-        imagePath: url + "/images/" + req.file.filename
+        imagePath: url + "/images/" + req.file.filename,
+        creator: req.userData.userId
     });
     post.save().then(result =>{
         res.status(201).json({
@@ -76,9 +78,9 @@ router.get('/:id', (req, res, next) =>{
             res.status(404).json({message: 'Post not found'})
         }
     })
-})
+});
 
-router.put('/:id', multer({storage: storage}).single("image"), (req, res, next) => {
+router.put('/:id', checkAuth,multer({storage: storage}).single("image"), (req, res, next) => {
     let imagePath = req.body.imagePath;
     if(req.file){
         const url = req.protocol + '://' + req.get('host');
@@ -87,20 +89,35 @@ router.put('/:id', multer({storage: storage}).single("image"), (req, res, next) 
     const post = new Post({
         _id: req.body.id,
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        creator: req.userData.userId
     });
-    Post.updateOne({_id: req.params.id}, post).then(result =>{
-        res.status(200).json({
-            message: 'Post updated successfully'
-        });
-    });
+    Post.updateOne({_id: req.params.id, creator: req.userData.userId}, post).then(result =>{
+        if(result.nModified > 0){
+            res.status(200).json({
+        message: 'Post updated successfully'
+        })
+        }else{
+            res.status(401).json({
+                message: 'Not Authorized'
+                })
+        }
+
+});
 });
 
-router.delete('/:id', (req, res , next) => {
-    Post.deleteOne({_id: req.params.id}).then(result => {
-        res.status(200).json({
-            message: 'Post deleted successfully'
-        });
+router.delete('/:id', checkAuth,(req, res , next) => {
+    Post.deleteOne({_id: req.params.id, creator: req.userData.userId}).then(result => {
+        if(result.n > 0){
+            res.status(200).json({
+        message: 'Post updated successfully'
+        })
+        }else{
+            res.status(401).json({
+                message: 'Not Authorized'
+                })
+        }
+
     });
    
 });
