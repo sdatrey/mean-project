@@ -35,11 +35,22 @@ export class AuthService {
   }
   createUser(name: string, email: string, password: string){
     const authData : User = {name: name, email: email, password: password};
-    this.http.post('http://localhost:3000/signup', authData)
-    .subscribe(() =>{
-      this.router.navigate(['/']);
+    this.http.post<{token: string, expiresIn: number, userId: string}>('http://localhost:3000/signup', authData)
+    .subscribe((res) =>{
+      const token = res.token;
+      this.token = token;
+      if(token){
+        const expiresInDuration = res.expiresIn
+        this.setAuthTimer(expiresInDuration);
+      this.isAuthenticated = true;
+      this.userId = res.userId;
       this.authStatusListener.next(true);
-    }, error => {
+      const now = new Date();
+     const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
+      this.saveAuthData(token, expirationDate, this.userId);
+      this.router.navigate(['/']);
+    }
+      }, error => {
       this.authStatusListener.next(false);
     });  
   }
