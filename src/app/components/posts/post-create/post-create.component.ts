@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { CreatePost } from 'src/app/store/action/action';
+import { PostState } from 'src/app/store/reducer/reducer';
 import { PostService } from '../post-list/post.service';
 import { Post } from '../post.model';
 import { mimeType } from './mime-type.validator';
@@ -24,7 +27,7 @@ export class PostCreateComponent implements OnInit {
   imagePreview: string;
   private mode = 'create';
   private postId: string;
-  constructor(public postService: PostService, public route: ActivatedRoute) { }
+  constructor(public postService: PostService, public route: ActivatedRoute, private store: Store<PostState>) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -74,6 +77,12 @@ export class PostCreateComponent implements OnInit {
     }
     if(this.mode === 'create'){
         this.postService.addPost(this.form.value.title, this.form.value.content, this.form.value.image);
+        this.store.dispatch(CreatePost({post: {
+          title: this.form.value.title,
+          content: this.form.value.content,
+          imagePath: this.form.value.image
+        }}))
+        console.log(this.form.value.image);
     } else {
       this.postService.updatePost(this.postId,this.form.value.title, this.form.value.content, this.form.value.image);
     }
