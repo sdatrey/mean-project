@@ -17,6 +17,18 @@ const PostReducer = createReducer(
             ...state,
             posts: [...state.posts, post]
         }
+    }),
+    on(PostPageAction.DeletePost, (state, {id}) => {
+        return{
+            ...state,
+            posts: [...state.posts, id]
+        }
+    }),
+    on(PostPageAction.EditPost, (state, {id}) => {
+        return {
+            ...state,
+            posts: [...state.posts, id]
+        }
     })
 )
 export function reducer(state = initialState, action: Action){
