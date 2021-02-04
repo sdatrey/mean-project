@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CreatePost } from 'src/app/store/action/action';
+import { CreatePost, EditPost } from 'src/app/store/action/action';
 import { PostState } from 'src/app/store/reducer/reducer';
 import { PostService } from '../post-list/post.service';
 import { Post } from '../post.model';
@@ -84,6 +84,13 @@ export class PostCreateComponent implements OnInit {
         }}))
     } else {
       this.postService.updatePost(this.postId,this.form.value.title, this.form.value.content, this.form.value.image);
+      const updatedPost : Post = {
+        id: this.postId,
+        title: this.form.value.title,
+        content: this.form.value.content,
+        imagePath: this.form.value.image
+      }
+      this.store.dispatch(EditPost({id: this.postId, updates: updatedPost}))
     }
 
     this.form.reset();

@@ -7,9 +7,13 @@ export const CreatePost = createAction(
 );
 export const EditPost = createAction(
     '[Edit Page] Edit',
-    props<{id: string, updates: Partial<Post>}>()
+    props<{id: string, updates: Post}>()
 );
 export const DeletePost = createAction(
     '[Delete Page] Delete',
     props<{id: string}>()
 );
+export const GetPost = createAction(
+    '[Get Page] Get',
+    props<{post: Post}>()
+)

@@ -24,10 +24,24 @@ const PostReducer = createReducer(
             posts: [...state.posts, id]
         }
     }),
-    on(PostPageAction.EditPost, (state, {id}) => {
+    on(PostPageAction.EditPost, (state, {id, updates}) => {
+        const index = state.posts.findIndex((post: Post) => post.id ==id);
+        const updatedPost = state.posts.map((p: Post) => {
+            if (p.id === id) {
+                return {
+                    ...updates
+                };
+            }
+        })
         return {
             ...state,
-            posts: [...state.posts, id]
+            posts: updatedPost
+        }
+    }),
+    on(PostPageAction.GetPost, (state, {post}) => {
+        return {
+            ...state,
+            posts: [post]
         }
     })
 )

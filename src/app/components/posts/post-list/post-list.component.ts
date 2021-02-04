@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { DeletePost, EditPost } from 'src/app/store/action/action';
+import { DeletePost, EditPost, GetPost } from 'src/app/store/action/action';
 import { AuthService } from '../../auth/auth.service';
 import { Post } from '../post.model';
 import { PostService } from './post.service';
@@ -27,6 +27,7 @@ export class PostListComponent implements OnInit , OnDestroy {
 
   ngOnInit() {
       this.postService.getPosts(this.postsPerPage, this.currentPage);
+      
       this.userId = this.authService.getUserId();
       this.postsSub = this.postService.getPostUpdateListener().subscribe((postData: {posts: Post[], postCount: number}) => {
         this.totalPosts = postData.postCount;
